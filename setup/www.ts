@@ -6,7 +6,7 @@ import * as fs from 'fs'
 import * as http from 'http'
 
 import { NODE_ENV, PORT } from '../src/api/lib/constants'
-import { WonderQ } from '../src/app'
+import { APP } from '../src/app'
 import { logger } from '../src/config/winston'
 
 /** Create log file */
@@ -71,7 +71,7 @@ const onListening = () => {
 }
 
 /** Initialize api service */
-const api = new WonderQ()
+const api = new APP()
 const app = api.app
 
 app.set('port', port)

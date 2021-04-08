@@ -12,6 +12,6 @@ export const constants = {
     NGN: '566'
   },
   JWT: {
-    SECRET: '5GO8vZfBEYxDqjFyYgZYfqzPwsi9W4'
+    SECRET: process.env.JWT_SECRET || '5GO8vZfBEYx'
   }
 }

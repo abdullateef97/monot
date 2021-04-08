@@ -6,7 +6,7 @@ import { mongo } from '../src/config/mongo'
 import { routes } from './api/routes'
 import { logger } from './config/winston'
 
-export class WonderQ {
+export class APP {
   readonly server: express.Application
 
   public constructor() {
@@ -43,7 +43,7 @@ export class WonderQ {
   }
 
   public async init() {
-    return new WonderQ()
+    return new APP()
   }
 
   public routes(app?: express.Application) {
