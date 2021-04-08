@@ -11,9 +11,10 @@ import { logger } from '../src/config/winston'
 
 /** Create log file */
 try {
+  const timestamp: number = Date.now()
   fs.mkdir(`${rootPath}/logs/`, (error) => {
     if (!error || error.code === 'EEXIST' || error.errno === -17) {
-      fs.open(`${rootPath}/logs/${logger.transports.file.filename}`, 'w', (err, fd) => {
+      fs.open(`${rootPath}/logs/cache-${timestamp}.log`, 'w', (err, fd) => {
         if (fd) {
           fs.close(fd, (e: any) => {
             if (!e) {

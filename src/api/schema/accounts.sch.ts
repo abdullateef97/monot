@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import { join } from 'lodash';
 
 export const createAccountSchema = Joi.object({
   initialDeposit: Joi.number(),

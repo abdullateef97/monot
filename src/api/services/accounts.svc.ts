@@ -1,7 +1,5 @@
-import { map, pick } from 'lodash/fp'
-
 import { config } from '../../config/settings'
-import { Accounts, IAccounts, Customers } from '../models'
+import { Accounts, IAccounts } from '../models'
 import { accounts, CreateAccountInput, CreateAccountOutput } from '../interfaces/accounts.int'
 import { getCustomerDetails } from './customer.svc';
 import { GetCustomerDetailsInput } from '../interfaces/customer.int';

@@ -1,6 +1,8 @@
 import '../../setup/envConfig'
 
-import * as express from 'express'
+import * as express from 'express';
+const fs = require('fs');
+const path = require('path');
 
 import { CustomerController, AccountsController, TransferController } from './controllers'
 import { validateSchema } from './middleware/validateSchema';
@@ -23,6 +25,9 @@ const routes = (app: express.Router) => {
   // transfers
   app.post('/transfer', validateSchema(transferFundsSchema), validateToken, TransferController.transferFunds);
   app.get('/transfer/:accountNumber', validateToken, TransferController.getTransferHistory)
+  app.get('/docs', (req, res, next) => {
+    return res.sendFile('../../docs/index.html', {root: __dirname })
+  })
 
   return app
 }
