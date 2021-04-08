@@ -6,7 +6,7 @@ import { failure, success } from '../lib/response'
 import { CustomerService } from '../services'
 
 /**
- * @api {post} /customer/create Create a new customer
+ * @api {post} /customer/ Create a new customer
  * @apiGroup Customer
  *
  * @apiSuccess {Object} response
@@ -39,7 +39,7 @@ export const createCustomer = async (req: Request, res: Response) => {
   try {
     const body: CreateCustomerInput = req.body;
     const response = await CustomerService.createCustomer(body);
-    return success({ res, data: response, httpCode: 200 })
+    return success({ res, data: response, httpCode: 200 });
   } catch (err) {
     return failure({ res, message: err, httpCode: err.httpCode || 500 })
   }

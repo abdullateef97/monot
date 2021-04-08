@@ -1,17 +1,97 @@
 import { Request, Response } from 'express'
+import { CreateAccountInput } from '../interfaces/accounts.int';
 
 import { failure, success } from '../lib/response'
-import { IQueue } from '../models/Accounts'
 import { AccountService } from '../services'
 
 /**
- * @api {get} /messages Get All Messages in Queue
- * @apiName Get Messages in Queue
- * @apiGroup Messages
+ * @api {post} /account Create a new account
+ * @apiGroup account
  *
  * @apiSuccess {Object} response
  * @apiSuccess {String} message
- * @apiSuccess {Object[]} data
+ * @apiSuccess {Object} data
+ * @apiSuccess {Object} message
+ * @apiSuccess {String} message.id
+ * @apiSuccess {String} message.message
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *      "data": {
+ *         accountNumber: string
+ *         accountOwner: string
+ *         currentBalance: number // this is in kobo
+ *         active: boolean
+ *         currency: string
+ *         updatedAt: any
+ *         phoneNumber: string
+ *      },
+ *      "message": "sucessful",
+ *    }
+ */
+
+export const createAccount = async (req: Request, res: Response) => {
+  try {
+    const body: CreateAccountInput = req.body;
+    const customerId = req.header('customerId');
+    if (!customerId) {
+      return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
+    }
+    body.accountOwner = customerId;
+    const response = await AccountService.createAccount(body);
+    return success({ res, data: response, httpCode: 201, message: 'Successfully Created Account' });
+  } catch (err) {
+    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+  }
+}
+
+/**
+ * @api {get} /account/details/:accountNumber Get Account Details
+ * @apiGroup account
+ *
+ * @apiSuccess {Object} response
+ * @apiSuccess {String} message
+ * @apiSuccess {Object} data
+ * @apiSuccess {Object} message
+ * @apiSuccess {String} message.id
+ * @apiSuccess {String} message.message
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *      "data": {
+ *         accountNumber: string
+ *         accountOwner: string
+ *         currentBalance: number // this is in kobo
+ *         active: boolean
+ *         currency: string
+ *         updatedAt: any
+ *         phoneNumber: string
+ *      },
+ *      "message": "successful",
+ *    }
+ */
+export const getAccountDetails = async (req: Request, res: Response) => {
+  const accountNumber = req.params['accountNumber'];
+  if (!accountNumber) {
+    return failure({ res, message: 'Please Provide an account number', httpCode: 400 })
+  }
+  try {
+    const response= await AccountService.getAccountDetails(accountNumber);
+    return success({ res, data: response, httpCode: 200, message: 'Account Details' })
+  } catch (err) {
+    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+  }
+}
+
+/**
+ * @api {get} /account Get all a customer's accounts
+ * @apiGroup account
+ *
+ * @apiSuccess {Object} response
+ * @apiSuccess {String} message
+ * @apiSuccess {Object} data
  * @apiSuccess {Object} message
  * @apiSuccess {String} message.id
  * @apiSuccess {String} message.message
@@ -20,87 +100,38 @@ import { AccountService } from '../services'
  *     HTTP/1.1 200 OK
  *     {
  *      "data": [
+ *          {
+ *         accountNumber: string
+ *         accountOwner: string
+ *         currentBalance: number // this is in kobo
+ *         active: boolean
+ *         currency: string
+ *         updatedAt: any
+ *         phoneNumber: string
+ *      },
  *        {
- *          "_id": "5f54055f212c2f9cd9373198",
- *          "message": "a test message"
- *        },
- *        {
- *          "_id": "5f54055f212c2f9cd9373199",
- *          "message": "a new test message"
- *        },
+ *         accountNumber: string
+ *         accountOwner: string
+ *         currentBalance: number // this is in kobo
+ *         active: boolean
+ *         currency: string
+ *         updatedAt: any
+ *         phoneNumber: string
+ *      } 
  *      ],
- *      "message": "sucessful",
+ *      "message": "successful",
  *    }
  */
-
-const getMessages = async (req: Request, res: Response) => {
-  try {
-    const messages: Partial<IQueue>[] = await QueueService.getUnconfirmedMessages()
-    return success({ res, data: messages, httpCode: 200 })
-  } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
-  }
-}
-
-/**
- * @api {post} /message Add Message to Queue
- * @apiName Add Message
- * @apiGroup Message
- *
- * @apiParam {String} message Message to be added to queue
- *
- * @apiSuccess {Object} response Api default response format
- * @apiSuccess {String} message  Success message
- * @apiSuccess {String} data     Response data
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *      "data": "5f54055f212c2f9cd9373198",
- *      "message": "sucessful",
- *    }
- *
- */
-const addMessage = async (req: Request, res: Response) => {
-  const { message } = req.body
-  if (!message) {
-    return failure({ res, message: 'Can not add empty message', httpCode: 400 })
+export const getAllCustomerAccounts = async (req: Request, res: Response) => {
+  const customerId = req.header('customerId');
+  if (!customerId) {
+    return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
   }
   try {
-    const messageId: number = await QueueService.addMessage(message)
-    return success({ res, data: messageId, httpCode: 201 })
-  } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
-  }
-}
-
-/**
- * @api {put} /messages/confirm Confirm Messages Processed By Consumer in Queue
- * @apiName Confirm Messages
- * @apiGroup Messages
- *
- * @apiParam {String[]} processed Processed message ids to be confirmed
- *
- * @apiSuccess {Object} response Api default response format
- * @apiSuccess {String} message  Success message
- * @apiSuccess {String} data     Response data
- *
- * @apiSuccessExample Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *      "data": [],
- *      "message": "sucessful",
- *    }
- *
- */
-const confirmMessages = async (req: Request, res: Response) => {
-  const { processed } = req.body
-  try {
-    await QueueService.confirmMessages(processed)
-    return success({ res, data: [], httpCode: 200 })
+    const response = await AccountService.getAllCustomerAccounts(customerId);
+    return success({ res, data: response, httpCode: 200, message: 'All Accounts' })
   } catch (err) {
     return failure({ res, message: err.message, errStack: err, httpCode: err.httpCode || 500 })
   }
 }
 
-export { getMessages, addMessage, confirmMessages }
