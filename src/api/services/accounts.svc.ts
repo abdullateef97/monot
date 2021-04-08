@@ -7,6 +7,8 @@ import { getCustomerDetails } from './customer.svc';
 import { GetCustomerDetailsInput } from '../interfaces/customer.int';
 import { generateAccountNumber } from '../lib/utils';
 import { constants } from '../lib/constants';
+import { MoveFundsInput } from '../interfaces/transfer.int';
+import { moveFunds } from './transfer.svc';
 
 export const createAccount = async (input: CreateAccountInput): Promise<IAccounts> => {
   // check if phoneNumber is provided, if not. get customer details with customerId
@@ -29,6 +31,16 @@ export const createAccount = async (input: CreateAccountInput): Promise<IAccount
     const createdAccount = await new Accounts(accountInput).save();
     if (input.initialDeposit) {
       // move initial deposit to this account
+      if (!input.sourceAccount) {
+        throw new Error('Please Specify an existing account to fund this new account from');
+      }
+      const depositObject: MoveFundsInput = {
+        sourceAccountNumber: input.sourceAccount,
+        destAccountNumber: createdAccount.accountNumber,
+        amount: input.initialDeposit,
+        narration: `Fund Account ${createdAccount.accountNumber}`,
+      }
+      await moveFunds(depositObject);
     }
     return createdAccount.toJSON();
   } catch (error) {

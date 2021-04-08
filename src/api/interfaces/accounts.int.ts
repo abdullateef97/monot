@@ -2,6 +2,7 @@ interface CreateAccountInput {
   accountOwner: string
   initialDeposit?: number // this is in kobo
   phoneNumber?: string
+  sourceAccount?: string
 }
 
 interface CreateAccountOutput {

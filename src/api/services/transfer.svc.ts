@@ -35,6 +35,9 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
     }
 
     if (sourceAccount.accountOwner !== destAccount.accountOwner) {
+      if (!sourcePin) {
+        throw new Error('Please Provide your transaction Pin')
+      }
       // validate pin
       const isPinValid = await validateTransactionPin({
         customerId: sourceAccount.accountNumber,
