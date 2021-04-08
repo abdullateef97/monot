@@ -5,10 +5,10 @@ import { Customers, ICustomer } from '../models';
 
 
 // creates a customer
-const createCustomer = async (input: CreateCustomerInput): Promise<CreateCustomerOutput> => {
+export const createCustomer = async (input: CreateCustomerInput): Promise<CreateCustomerOutput> => {
   // hashPassword and pin
   // generate customerId
-  // create wallet
+  // create account with default balance of 0
   // save customer
   // generate access_token
   // send response
@@ -27,7 +27,7 @@ const createCustomer = async (input: CreateCustomerInput): Promise<CreateCustome
       customerId,
     }
 
-    // create wallet
+    // create account
 
     const response = await new Customers(customer).save();
     const encoded = encodeToken(response.customerId);
@@ -43,7 +43,7 @@ const createCustomer = async (input: CreateCustomerInput): Promise<CreateCustome
 }
 
 // logs in a customer
-const loginCustomer = async (input: LoginCustomerInput): Promise<CreateCustomerOutput> => {
+export const loginCustomer = async (input: LoginCustomerInput): Promise<CreateCustomerOutput> => {
   // get customer details by username
   // check if customer exists
   // compare password
@@ -72,7 +72,7 @@ const loginCustomer = async (input: LoginCustomerInput): Promise<CreateCustomerO
 }
 
 // validates transaction pin
-const validateTransactionPin = async (input: ValidateTransactionPinInput) : Promise<boolean> => {
+export const validateTransactionPin = async (input: ValidateTransactionPinInput) : Promise<boolean> => {
   // get customer details by customerId
   // check if customer exists
   // compare password
@@ -94,7 +94,7 @@ const validateTransactionPin = async (input: ValidateTransactionPinInput) : Prom
 }
 
 // get customer details
-const getCustomerDetails = async (input: GetCustomerDetailsInput): Promise<ICustomer> => {
+export const getCustomerDetails = async (input: GetCustomerDetailsInput): Promise<ICustomer> => {
   // check if username or customerId exists in input
   try {
     const query: GetCustomerDetailsInput = {};
@@ -112,17 +112,10 @@ const getCustomerDetails = async (input: GetCustomerDetailsInput): Promise<ICust
     if (!customer) {
       throw new Error('Customer Does Not Exist');
     }
-    return customer;
+    return customer.toJSON();
   } catch (error) {
     logger.error('Error Getting Customer Details')
     logger.error(error)
     throw error;
   }
-}
-
-module.exports = {
-  createCustomer,
-  loginCustomer,
-  validateTransactionPin,
-  getCustomerDetails,
 }

@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { encode, TAlgorithm, decode } from "jwt-simple";
+import { format } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 import { logger } from '../../config/winston';
 import { DecodeResult, EncodeResult, Session } from '../interfaces/jwt';
@@ -112,3 +113,16 @@ export const decodeToken = (token: string) : DecodeResult => {
       session: result
   }
 }
+
+export const generateAccountNumber = (phoneNumber: string, currency?: string): string => {
+  if (!currency || currency.length <= 0) {
+    currency = constants.CURRENCY.NGN;
+  }
+  const last4 = phoneNumber.substring(phoneNumber.length-4, phoneNumber.length)
+  const timeSuffix = format(new Date(), "1504")
+  return `${currency}${last4}${timeSuffix}`
+}
+
+export const convertToNairaDecimal = (number: number) : number => parseInt((number / 100).toFixed(2), 10);
+
+export const convertToKobos = (number: number) => parseInt((number * 100).toFixed(0), 10);

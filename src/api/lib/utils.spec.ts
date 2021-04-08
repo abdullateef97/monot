@@ -1,4 +1,4 @@
-import { bcryptCompareCredential, bcryptHashCredential, decodeToken, encodeToken, sanitizePhoneNumberToIntlFormat, trimPhoneNumber } from './utils';
+import { bcryptCompareCredential, bcryptHashCredential, decodeToken, encodeToken, generateAccountNumber, sanitizePhoneNumberToIntlFormat, trimPhoneNumber } from './utils';
 
 describe('Encrypt and Decrypt Password', () => {
   it('should encrypt password', async () => {
@@ -100,5 +100,12 @@ describe('encode and decode token', () => {
     const decoded = decodeToken(encoded.token);
     expect(decoded.session?.customerId).toEqual(customerId)
 
+  })
+})
+
+describe('generateAccountNumber', () => {
+  it('should return an string of 11 length', () => {
+    const accountNumber = generateAccountNumber('+2348132400456');
+    expect(accountNumber.length).toEqual(11);
   })
 })

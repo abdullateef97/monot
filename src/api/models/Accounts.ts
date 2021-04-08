@@ -3,11 +3,12 @@ import { constants } from '../lib/constants';
 
 interface IAccounts extends Document {
   accountNumber: string
-  accountOwner: number
+  accountOwner: string
   currentBalance: number // this is in kobo
   active?: boolean
   currency?: string
   updatedAt?: any
+  phoneNumber: string
 }
 interface IAccountsModel extends Model<IAccounts> {}
 
@@ -19,12 +20,12 @@ const accountsSchema = new Schema(
       length: 11,
     },
     accountOwner: {
-      type: Number,
+      type: String,
       required: true,
     },
     currentBalance: {
       type: Number,
-      required: true,
+      default: 0.00
     },
     active: {
       type: Boolean,
@@ -34,9 +35,21 @@ const accountsSchema = new Schema(
       type: String,
       default: constants.CURRENCY.NGN
     },
+    phoneNumber: {
+      type: String
+    }
   },
   { timestamps: true }
 )
+
+accountsSchema.index({ accountNumber: 1 })
+accountsSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform(_doc, ret) {
+    delete ret._id;
+  }
+});
 
 const Accounts = model<IAccounts, IAccountsModel>('Accounts', accountsSchema)
 

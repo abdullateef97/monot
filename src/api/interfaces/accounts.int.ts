@@ -1,9 +1,29 @@
-interface CreateAccount {
+interface CreateAccountInput {
+  accountOwner: string
+  initialDeposit?: number // this is in kobo
+  phoneNumber?: string
+}
+
+interface CreateAccountOutput {
   accountNumber: string
-  accountOwner: number
-  initialDeposit: number // this is in kobo
+  accountOwner: string
+  currentBalance: number // this is in kobo
+  active?: boolean
+  currency?: string
+  updatedAt?: any
+  phoneNumber: string
+}
+
+
+interface accounts {
+  accountNumber: string
+  accountOwner: string
+  phoneNumber: string
+  currentBalance?: number
 }
 
 export {
-  CreateAccount
+  CreateAccountInput,
+  accounts,
+  CreateAccountOutput
 }
