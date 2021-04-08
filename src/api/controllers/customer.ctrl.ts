@@ -6,7 +6,7 @@ import { failure, success } from '../lib/response'
 import { CustomerService } from '../services'
 
 /**
- * @api {post} /customer/ Create a new customer
+ * @api {post} /customer Create a new customer
  * @apiGroup Customer
  *
  * @apiSuccess {Object} response
@@ -39,7 +39,7 @@ export const createCustomer = async (req: Request, res: Response) => {
   try {
     const body: CreateCustomerInput = req.body;
     const response = await CustomerService.createCustomer(body);
-    return success({ res, data: response, httpCode: 200 });
+    return success({ res, data: response, httpCode: 201 });
   } catch (err) {
     return failure({ res, message: err, httpCode: err.httpCode || 500 })
   }
@@ -86,7 +86,7 @@ export const createCustomer = async (req: Request, res: Response) => {
 }
 
 /**
- * @api {get} /customer/:username Get a customer details by username
+ * @api {get} /customer Get a customer details by username
  * @apiGroup Customer
  *
  * @apiSuccess {Object} response
@@ -113,9 +113,12 @@ export const createCustomer = async (req: Request, res: Response) => {
  */
 export const getCustomerDetails = async (req: Request, res: Response) => {
   try {
-    const username = req.params.username;
+    const customerId = req.header('customerId');
+    if (!customerId) {
+      return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
+    }
     const input: GetCustomerDetailsInput = {
-      username,
+      customerId,
     }
     const response = await CustomerService.getCustomerDetails(input);
     return success({ res, data: response, httpCode: 200 })

@@ -2,12 +2,23 @@ import '../../setup/envConfig'
 
 import * as express from 'express'
 
-import { QueueController } from './controllers'
+import { CustomerController, AccountsController, TransferController } from './controllers'
 
 const routes = (app: express.Router) => {
-  app.get('/messages', QueueController.getMessages)
-  app.post('/message', QueueController.addMessage)
-  app.put('/messages/confirm/', QueueController.confirmMessages)
+  // customer
+  app.post('/customer', CustomerController.createCustomer);
+  app.post('/customer/login', CustomerController.loginCustomer);
+  app.get('/customer', CustomerController.getCustomerDetails);
+
+  // accounts
+  app.post('/account', AccountsController.createAccount);
+  app.get('/account', AccountsController.getAllCustomerAccounts)
+  app.get('/account/details/:accountNumber', AccountsController.getAccountDetails);
+
+  // transfers
+  app.post('/transfer', TransferController.transferFunds);
+  app.get('/transfer/:accountNumber', TransferController.getTransferHistory)
+
   return app
 }
 

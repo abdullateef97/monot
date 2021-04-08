@@ -1,3 +1,3 @@
-import * as QueueController from './accounts.ctrl'
-
-export { QueueController }
+export * as AccountsController from './accounts.ctrl';
+export * as CustomerController from './customer.ctrl';
+export * as TransferController from './transfer.ctrl';

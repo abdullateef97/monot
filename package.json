@@ -19,9 +19,7 @@
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/IsraelGboluwaga/cache-api/issues"
   },
-  "homepage": "https://github.com/IsraelGboluwaga/cache-api#readme",
   "dependencies": {
     "@types/app-root-path": "^1.2.4",
     "@types/chai": "^4.2.11",
