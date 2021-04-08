@@ -23,7 +23,7 @@ const accountsSchema = new Schema(
       type: String,
       required: true,
     },
-    currentBalance: {
+    currentBalance: { // in kobo
       type: Number,
       default: 0.00
     },
