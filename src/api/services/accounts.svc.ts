@@ -26,7 +26,8 @@ export const createAccount = async (input: CreateAccountInput): Promise<IAccount
       accountOwner: input.accountOwner,
       phoneNumber: input.phoneNumber
     }
-    const createdAccount = await new Accounts(accountInput).save();
+    const response = await new Accounts(accountInput).save();
+    let createdAccount = response.toJSON()
     if (input.initialDeposit) {
       // move initial deposit to this account
       if (!input.sourceAccount) {
@@ -40,8 +41,9 @@ export const createAccount = async (input: CreateAccountInput): Promise<IAccount
         customerId: createdAccount.accountOwner,
       }
       await moveFunds(depositObject);
+      createdAccount = await getAccountDetails(createdAccount.accountNumber)
     }
-    return createdAccount.toJSON();
+    return createdAccount;
   } catch (error) {
     throw error;
   }
