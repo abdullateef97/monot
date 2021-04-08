@@ -60,6 +60,12 @@ const customerSchema = new Schema(
 )
 
 customerSchema.index({ customerId: 1 })
+customerSchema.index({ username: 1 })
+customerSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform(_doc, ret) { delete ret._id; }
+});
 
 const Customers = model<ICustomer, ICustomerModel>('Customers', customerSchema)
 

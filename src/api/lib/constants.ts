@@ -10,5 +10,8 @@ export const constants = {
   },
   CURRENCY: {
     NGN: 'NGN'
+  },
+  JWT: {
+    SECRET: '5GO8vZfBEYxDqjFyYgZYfqzPwsi9W4'
   }
 }

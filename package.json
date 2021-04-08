@@ -1,7 +1,6 @@
 {
-  "name": "WonderQ",
+  "name": "mono_test",
   "version": "1.0.0",
-  "description": "Ask Wonder Test",
   "main": "app.js",
   "directories": {
     "test": "test"
@@ -12,14 +11,12 @@
     "lint:fix": "prettier --write '*/**/*.{js,ts,tsx,jsx}' && eslint --quiet --cache --fix '*/**/*.{js,ts,tsx}'",
     "precommit": "lint-staged",
     "start": "node build/src/index.js",
-    "test": "NODE_ENV=test TS_NODE_FILES=true mocha --exit --timeout 20000 --require ts-node/register 'test/**/*.spec.ts'",
+    "test": "jest",
     "docs": "apidoc -i src/ -o docs/"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/IsraelGboluwaga/cache-api.git"
+    "type": "git"
   },
-  "author": "Israel Arunah <arunahisraelg2010@gmail.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/IsraelGboluwaga/cache-api/issues"
@@ -32,7 +29,6 @@
     "@types/express": "^4.17.1",
     "@types/helmet": "0.0.47",
     "@types/lodash": "^4.14.161",
-    "@types/mocha": "^7.0.2",
     "@types/moment-timezone": "^0.5.30",
     "@types/mongoose": "^5.7.28",
     "@types/node": "^14.0.14",
@@ -53,18 +49,29 @@
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "express": "^4.17.1",
     "helmet": "^3.23.3",
+    "jwt-simple": "^0.5.6",
     "lodash": "^4.17.20",
-    "mocha": "^8.0.1",
     "mongoose": "^5.9.20",
     "morgan": "^1.10.0",
-    "node-cron": "^2.0.3",
     "prettier": "^2.1.1",
     "ts-node-dev": "^1.0.0-pre.49",
     "tsc-watch": "^4.2.9",
     "typescript": "^3.9.5",
+    "uuid": "^8.3.2",
     "winston": "2.4.0"
   },
   "engines": {
     "node": "15.x"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/bcrypt": "^3.0.0",
+    "@types/jest": "^26.0.22",
+    "@types/jwt-simple": "^0.5.33",
+    "@types/uuid": "^8.3.0",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3"
   }
 }
