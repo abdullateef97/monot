@@ -33,12 +33,12 @@ const customerSchema = new Schema(
       type: Boolean,
       default: true,
     },
-    customerId: {
+    phoneNumber: {
       type: String,
       required: true,
       unique: true,
     },
-    phoneNumber: {
+    customerId: {
       type: String,
       required: true,
       unique: true,

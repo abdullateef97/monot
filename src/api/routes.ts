@@ -12,6 +12,8 @@ import { createAccountSchema } from './schema/accounts.sch';
 import { transferFundsSchema } from './schema/transfer.sch';
 
 const routes = (app: express.Router) => {
+
+  app.use(express.static('docs'))
   // customer
   app.post('/customer', validateSchema(createCustomerSchema), CustomerController.createCustomer);
   app.post('/customer/login', validateSchema(loginCustomerSchema), CustomerController.loginCustomer);
@@ -26,7 +28,7 @@ const routes = (app: express.Router) => {
   app.post('/transfer', validateSchema(transferFundsSchema), validateToken, TransferController.transferFunds);
   app.get('/transfer/:accountNumber', validateToken, TransferController.getTransferHistory)
   app.get('/docs', (req, res, next) => {
-    return res.sendFile('../../docs/index.html', {root: __dirname })
+    return res.sendFile(path.resolve('docs/index.html'))
   })
 
   return app

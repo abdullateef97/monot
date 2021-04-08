@@ -43,6 +43,15 @@ export const createCustomer = async (input: CreateCustomerInput): Promise<Create
       access_token: encoded.token,
     }
   } catch (error) {
+    console.log({error})
+    // mongodb error
+    if (error.code === 11000) {
+      const key = Object.keys(error.keyValue)
+      if (key[0] == 'customerId') {
+        throw new Error('Phone Number is already in use')
+      }
+      throw new Error(`${key[0]} is already in use`)
+    }
     logger.error('Error Creating Customer')
     logger.error(error)
     throw error;

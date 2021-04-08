@@ -45,6 +45,10 @@ export const createAccount = async (input: CreateAccountInput): Promise<IAccount
     }
     return createdAccount;
   } catch (error) {
+    if (error.code === 11000) {
+      const key = Object.keys(error.keyValue)
+      throw new Error(`${key[0]} is already in use`)
+    }
     throw error;
   }
 }

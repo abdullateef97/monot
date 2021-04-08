@@ -117,10 +117,18 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
+      if (error.code === 11000) {
+        const key = Object.keys(error.keyValue)
+        throw new Error(`${key[0]} is already in use`)
+      }
       throw error;
     }
     return response;
   } catch (error) {
+    if (error.code === 11000) {
+      const key = Object.keys(error.keyValue)
+      throw new Error(`${key[0]} is already in use`)
+    }
     throw error;
   }
 }
