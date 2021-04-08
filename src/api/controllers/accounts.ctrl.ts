@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { CreateAccountInput } from '../interfaces/accounts.int';
 
 import { failure, success } from '../lib/response'
+import { extractCustomerId } from '../lib/utils';
 import { AccountService } from '../services'
 
 /**
@@ -34,7 +35,7 @@ import { AccountService } from '../services'
 export const createAccount = async (req: Request, res: Response) => {
   try {
     const body: CreateAccountInput = req.body;
-    const customerId = req.header('customerId');
+    const customerId = extractCustomerId(req);
     if (!customerId) {
       return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
     }
@@ -42,7 +43,7 @@ export const createAccount = async (req: Request, res: Response) => {
     const response = await AccountService.createAccount(body);
     return success({ res, data: response, httpCode: 201, message: 'Successfully Created Account' });
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
 
@@ -81,7 +82,7 @@ export const getAccountDetails = async (req: Request, res: Response) => {
     const response= await AccountService.getAccountDetails(accountNumber);
     return success({ res, data: response, httpCode: 200, message: 'Account Details' })
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
 
@@ -123,7 +124,7 @@ export const getAccountDetails = async (req: Request, res: Response) => {
  *    }
  */
 export const getAllCustomerAccounts = async (req: Request, res: Response) => {
-  const customerId = req.header('customerId');
+  const customerId = extractCustomerId(req);
   if (!customerId) {
     return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
   }

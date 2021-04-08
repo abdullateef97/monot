@@ -1,7 +1,7 @@
 import { Document, Model, model, Schema } from 'mongoose';
 import { constants } from '../lib/constants';
 
-interface ITransfers extends Document {
+interface ITransfers  {
   amount: number // this is in kobo
   direction: number,
   accountNumber: string
@@ -12,7 +12,7 @@ interface ITransfers extends Document {
   narration?: string
   reference: string
 }
-interface ITransfersModel extends Model<ITransfers> {}
+interface ITransfersModel extends Model<ITransfers & Document> {}
 
 const transferSchema = new Schema(
   {
@@ -66,6 +66,6 @@ transferSchema.set('toJSON', {
   }
 });
 
-const Transfers = model<ITransfers, ITransfersModel>('Transfers', transferSchema)
+const Transfers = model<ITransfers & Document, ITransfersModel>('Transfers', transferSchema)
 
 export { Transfers, ITransfers }

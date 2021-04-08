@@ -7,6 +7,7 @@ interface MoveFundsInput {
   destAccountNumber: string
   narration?: string
   sourcePin?: string
+  customerId: string
 }
 
 interface MoveFundsOutput {

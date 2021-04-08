@@ -18,6 +18,7 @@ const accountsSchema = new Schema(
       type: String,
       required: true,
       length: 11,
+      unique: true,
     },
     accountOwner: {
       type: String,

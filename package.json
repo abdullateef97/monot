@@ -18,8 +18,7 @@
     "type": "git"
   },
   "license": "ISC",
-  "bugs": {
-  },
+  "bugs": {},
   "dependencies": {
     "@types/app-root-path": "^1.2.4",
     "@types/chai": "^4.2.11",
@@ -48,6 +47,8 @@
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "express": "^4.17.1",
     "helmet": "^3.23.3",
+    "http-status": "^1.5.0",
+    "joi": "^17.4.0",
     "jwt-simple": "^0.5.6",
     "lodash": "^4.17.20",
     "mongoose": "^5.9.20",

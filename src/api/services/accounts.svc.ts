@@ -39,6 +39,7 @@ export const createAccount = async (input: CreateAccountInput): Promise<IAccount
         destAccountNumber: createdAccount.accountNumber,
         amount: input.initialDeposit,
         narration: `Fund Account ${createdAccount.accountNumber}`,
+        customerId: createdAccount.accountOwner,
       }
       await moveFunds(depositObject);
     }

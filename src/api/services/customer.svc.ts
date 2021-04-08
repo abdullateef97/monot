@@ -2,6 +2,8 @@ import { CreateCustomerInput, CreateCustomerOutput, Customer, GetCustomerDetails
 import { bcryptCompareCredential, bcryptHashCredential, encodeToken, sanitizePhoneNumberToIntlFormat, trimPhoneNumber } from '../lib/utils';
 import { logger } from '../../config/winston'
 import { Customers, ICustomer } from '../models';
+import { createAccount } from './accounts.svc';
+import { CreateAccountInput } from '../interfaces/accounts.int';
 
 
 // creates a customer
@@ -27,9 +29,14 @@ export const createCustomer = async (input: CreateCustomerInput): Promise<Create
       customerId,
     }
 
-    // create account
-
     const response = await new Customers(customer).save();
+
+     // create account
+     const createAccountInput: CreateAccountInput = {
+      accountOwner: response.customerId,
+      phoneNumber: response.phoneNumber,
+    }
+    await createAccount(createAccountInput)
     const encoded = encodeToken(response.customerId);
     return {
       customer: response.toJSON(),
@@ -87,6 +94,7 @@ export const validateTransactionPin = async (input: ValidateTransactionPinInput)
     const isPinValid = await bcryptCompareCredential(customer.transactionPin, transactionPin);
     return isPinValid
   } catch (error) {
+    console.log({error})
     logger.error('Error Validating Transaction Pin')
     logger.error(error)
     throw error;

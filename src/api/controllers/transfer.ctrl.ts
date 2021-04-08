@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { MoveFundsInput } from '../interfaces/transfer.int';
 
 import { failure, success } from '../lib/response'
+import { extractCustomerId } from '../lib/utils';
 // import { IQueue } from '../models/Accounts'
 import { TransferService } from '../services'
 
@@ -51,11 +52,17 @@ import { TransferService } from '../services'
 
 export const transferFunds = async (req: Request, res: Response) => {
   try {
+    const customerId = extractCustomerId(req);
+    console.log({customerId});
+    if (!customerId) {
+      return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
+    }
     const body: MoveFundsInput = req.body;
+    body.customerId = customerId;
     const response = await TransferService.moveFunds(body);
     return success({ res, data: response, httpCode: 201, message: 'Transfer Successful' });
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
 
@@ -110,6 +117,6 @@ export const getTransferHistory = async (req: Request, res: Response) => {
     const response = await TransferService.getTransferHistory(accountNumber);
     return success({ res, data: response, httpCode: 200, message: 'Transfer History' })
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }

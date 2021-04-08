@@ -4,7 +4,6 @@ interface CreateCustomerInput {
   username: string
   password: string
   transactionPin: string
-  customerId: string
   phoneNumber: string
   firstName: string
   lastName: string

@@ -3,11 +3,7 @@ import mongoose from 'mongoose'
 import { config } from './settings'
 import { logger } from './winston'
 
-const connectionString =
-  !config.mongodb.username || !config.mongodb.password
-    ? `mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`
-    : `mongodb://${config.mongodb.username}:${config.mongodb.password}@${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.db}`
-
+const connectionString = config.mongodb.uri
 mongoose.Promise = global.Promise
 const mongo = () =>
   mongoose
@@ -15,6 +11,7 @@ const mongo = () =>
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
+      useFindAndModify: false,
     })
     .then((db) => {
       logger.info('Mongo Connection Established')

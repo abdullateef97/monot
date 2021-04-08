@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { CreateCustomerInput, GetCustomerDetailsInput, LoginCustomerInput } from '../interfaces/customer.int';
 
 import { failure, success } from '../lib/response'
+import { extractCustomerId } from '../lib/utils';
 // import { IQueue } from '../models/Accounts'
 import { CustomerService } from '../services'
 
@@ -38,10 +39,11 @@ import { CustomerService } from '../services'
 export const createCustomer = async (req: Request, res: Response) => {
   try {
     const body: CreateCustomerInput = req.body;
+    body.transactionPin = req.body.transactionPin.toString();
     const response = await CustomerService.createCustomer(body);
     return success({ res, data: response, httpCode: 201 });
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
 
@@ -81,7 +83,7 @@ export const createCustomer = async (req: Request, res: Response) => {
     const response = await CustomerService.loginCustomer(body);
     return success({ res, data: response, httpCode: 200 })
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
 
@@ -113,7 +115,8 @@ export const createCustomer = async (req: Request, res: Response) => {
  */
 export const getCustomerDetails = async (req: Request, res: Response) => {
   try {
-    const customerId = req.header('customerId');
+    const customerId = extractCustomerId(req);
+    console.log({customerId});
     if (!customerId) {
       return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
     }
@@ -123,6 +126,6 @@ export const getCustomerDetails = async (req: Request, res: Response) => {
     const response = await CustomerService.getCustomerDetails(input);
     return success({ res, data: response, httpCode: 200 })
   } catch (err) {
-    return failure({ res, message: err, httpCode: err.httpCode || 500 })
+    return failure({ res, message: err.message, httpCode: err.httpCode || 500 })
   }
 }
