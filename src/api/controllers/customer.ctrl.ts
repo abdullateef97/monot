@@ -116,7 +116,6 @@ export const createCustomer = async (req: Request, res: Response) => {
 export const getCustomerDetails = async (req: Request, res: Response) => {
   try {
     const customerId = extractCustomerId(req);
-    console.log({customerId});
     if (!customerId) {
       return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
     }

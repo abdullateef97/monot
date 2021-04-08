@@ -65,7 +65,6 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
     const session = await mongoose.startSession();
     session.startTransaction();
     let response: MoveFundsOutput;
-    console.log(111)
     try {
 
       const opts = { session, new: true };
@@ -93,7 +92,6 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
         narration,
       };
 
-      console.log({debitTransactionObject})
 
       const creditTransactionObject: ITransfers = {
         amount: amountInKobo,
@@ -119,7 +117,6 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
     } catch (error) {
       await session.abortTransaction();
       session.endSession();
-      console.log({error})
       throw error;
     }
     return response;

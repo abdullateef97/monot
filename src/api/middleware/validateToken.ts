@@ -23,7 +23,6 @@ export const validateToken = async (
   if (decoded.type !== 'valid' || !decoded.session) {
     return failure( { res, message: decoded.type, httpCode: httpStatus.UNAUTHORIZED});
   }
-  console.log({decoded})
 
   const session = decoded.session;
   if (!session.customerId) {

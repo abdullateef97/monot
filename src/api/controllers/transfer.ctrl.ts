@@ -53,7 +53,6 @@ import { TransferService } from '../services'
 export const transferFunds = async (req: Request, res: Response) => {
   try {
     const customerId = extractCustomerId(req);
-    console.log({customerId});
     if (!customerId) {
       return failure({ res, message: 'Please Provide a customer Id', httpCode: 400 })
     }

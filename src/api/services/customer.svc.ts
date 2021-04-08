@@ -94,7 +94,6 @@ export const validateTransactionPin = async (input: ValidateTransactionPinInput)
     const isPinValid = await bcryptCompareCredential(customer.transactionPin, transactionPin);
     return isPinValid
   } catch (error) {
-    console.log({error})
     logger.error('Error Validating Transaction Pin')
     logger.error(error)
     throw error;
