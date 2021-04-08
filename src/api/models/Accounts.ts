@@ -6,7 +6,6 @@ interface IAccounts extends Document {
   accountOwner: number
   currentBalance: number // this is in kobo
   active?: boolean
-  pin: string
   currency?: string
   updatedAt?: any
 }
@@ -30,10 +29,6 @@ const accountsSchema = new Schema(
     active: {
       type: Boolean,
       default: true,
-    },
-    pin: {
-      type: String,
-      required: true,
     },
     currency: {
       type: String,
