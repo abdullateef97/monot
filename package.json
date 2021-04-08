@@ -10,7 +10,7 @@
     "build": "NODE_ENV=production tsc -p tsconfig.json",
     "lint:fix": "prettier --write '*/**/*.{js,ts,tsx,jsx}' && eslint --quiet --cache --fix '*/**/*.{js,ts,tsx}'",
     "precommit": "lint-staged",
-    "prod": "node build/src/app.js",
+    "prod": "node build/setup/www.js",
     "start": "yarn run build && yarn run prod",
     "test": "jest",
     "docs": "apidoc -i src/ -o docs/"
