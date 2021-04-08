@@ -109,8 +109,8 @@ export const moveFunds = async (input: MoveFundsInput): Promise<MoveFundsOutput>
       const creditTransaction = await Transfers.create([creditTransactionObject], opts);
       //ts-ignore
       response = {
-        credit: creditTransaction,
-        debit: debitTransaction,
+        credit: creditTransaction[0],
+        debit: debitTransaction[0],
       };
       await session.commitTransaction();
       session.endSession()
